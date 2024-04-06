@@ -1,0 +1,7 @@
+﻿@model IEnumerable<DoAnLapTrinhWed_2.Models.Brand>
+
+@foreach (var item in Model)
+{
+    <li>@Html.ActionLink(item.Name, "GetProducts/" + item.BrandId, "Products")</li>
+}
+

@@ -1,0 +1,6 @@
+﻿@model IEnumerable<DoAnLapTrinhWed_2.Models.Brand>
+
+@foreach (var item in Model)
+{
+    <div class="dropdown-item" href="#">@Html.ActionLink(item.Name, "GetProducts/" + item.BrandId, "Products")</div>
+}

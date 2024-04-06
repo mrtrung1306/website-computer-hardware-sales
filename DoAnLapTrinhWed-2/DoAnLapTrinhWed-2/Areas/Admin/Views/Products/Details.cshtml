@@ -1,0 +1,108 @@
+﻿@model DoAnLapTrinhWed_2.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Brand.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Brand.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NCC.TenNCC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NCC.TenNCC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Avartar)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Avartar)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Avartar1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Avartar1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Avartar2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Avartar2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Avartar3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Avartar3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShortDes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShortDes)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TinhTrang)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TinhTrang)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BaoHanh)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BaoHanh)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

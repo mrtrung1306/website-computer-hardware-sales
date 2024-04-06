@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    <div class="widget-header mr-3" >
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="widget-header mr-3" style="float: right;">
+                <div class="icon-area">
+                    <i class="fa fa-user"></i>
+                </div>
+                <small class="text"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></small>
+            </div>
+            <div class="widget-header mr-3 " style="float: right;">
+                <div class="icon-area">
+                    <i class="fa fa-user"></i>
+                </div>
+                <small class="text">@Html.ActionLink("Xin chào "@*+ User.Identity.GetUserName() + "!"*@, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</small>
+            </div>
+
+        }
+    </div>
+        }
+        else
+        {
+        @*<ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>*@
+        <div class="widget-header mr-3">
+            <a href="@Url.Action("Login","Account")" class="widget-view">
+                <div class="icon-area">
+                    <i class="fa fa-user"></i>
+                    @*<span class="notify">3</span>*@
+                </div>
+                <small class="text"> Đăng Nhập </small>
+            </a>
+        </div>
+        <div class="widget-header mr-3">
+            <a href="@Url.Action("Register","Account")" class="widget-view">
+                <div class="icon-area">
+                    <i class="fa fa-address-card"></i>
+                    @*<span class="notify">1</span>*@
+                </div>
+                <small class="text"> Đăng Ký </small>
+            </a>
+        </div>
+        }

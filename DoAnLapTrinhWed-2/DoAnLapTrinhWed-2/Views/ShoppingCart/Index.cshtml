@@ -1,0 +1,195 @@
+﻿@model IEnumerable<DoAnLapTrinhWed_2.Models.CartModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    input.quantity {
+        width: 70%;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+
+    function calculateTotal() {
+        var total = 0;
+        $('.money').each(function () {
+            total += parseInt($(this).text());
+        });
+        $('#total').find('strong').text(total);
+    }
+
+
+    $(function () {
+    $(".removecart").click(function () {
+        var model = {};
+        //lấy id sản phẩm
+        model.Id = $(this).closest('tr').attr('id').split('-')[1];
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Remove", "ShoppingCart")',
+            data:  JSON.stringify(model) ,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function () {
+                alert("Xóa mặt hàng thành công!")
+                $('#CartCount').text(@Session["count"] - 1);
+                $("#product-" + model.Id).remove();
+                calculateTotal();
+            },
+            error: function () {
+                alert("Lỗi trong khi xóa mặt hàng!");
+            }
+        });
+
+        return false;
+    });
+
+    $(".quantity").change(function () {
+        var quantity = $(this).val();
+        var price = $(this).closest('tr').find('.price1').text();
+        var money = quantity * price;
+        $(this).closest('tr').find('.money').text(money);
+        var productId = $(this).closest('tr').attr('id').split('-')[1];
+        
+        $.ajax({
+        url: '@Url.Action("UpdateProductQuantity", "ShoppingCart")',
+        type: 'POST',
+        data: {
+            id: productId,
+            quantity: quantity
+        },
+        success: function () {
+            console.log('Updated quantity for product ' + productId);
+            calculateTotal();
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('.quantity').each(function () {   
+            var productId = $(this).closest('tr').attr('id').split('-')[1];
+            var quantity = localStorage.getItem(productId);
+            if (quantity) {
+                $(this).val(quantity);
+                var price = $(this).closest('tr').find('.price1').text();
+                var money = quantity * price;
+                $(this).closest('tr').find('.money').text(money);
+                calculateTotal();
+            }
+        });
+    });
+});
+</script>
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+    <div class="container">
+
+        <div class="row">
+            <main class="col-md-9">
+                <div class="card">
+
+                    <table class="table table-borderless table-shopping-cart">
+                        <thead class="text-muted">
+                            <tr class="small text-uppercase">
+                                <th scope="col">Sản Phẩm</th>
+                                <th scope="col" width="120">Số Lượng</th>
+                                <th scope="col" width="120">Đơn Giá</th>
+                                <th scope="col" width="120">Thành Tiền</th>
+                                <th scope="col" class="text-right" width="200"> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach(var item in Model)
+                                {
+                                    <tr id="product-@item.Product.Id">
+                                        <td>
+                                            <figure class="itemside">
+                                                <div class="aside"><img src="~/Content/images/items/@item.Product.Avartar" class="img-sm"></div>
+                                                <figcaption class="info">
+                                                    <a href="#" class="title text-dark">@item.Product.Name</a>
+                                                    <p class="text-muted small">Tình trạng: @item.Product.TinhTrang, Bảo hành: @item.Product.BaoHanh, <br> Nhà sản xuất: @item.Product.NCC.TenNCC</p>
+                                                </figcaption>
+                                            </figure>
+                                        </td>
+                                        <td width="50">
+                                            <input type="number" min="1" class="quantity" value="@item.Quantity"  />
+                                        </td>
+                                        <td>
+                                            <div class="price-wrap">
+                                                <var class="price1 ">@item.Product.Price</var>
+                                            </div> <!-- price-wrap .// -->
+                                        </td>
+                                        <td>
+                                            <div class="price-wrap">
+                                                <var class="price money">@item.Money</var>
+                                            </div> <!-- price-wrap .// -->
+                                        </td>
+                                        <td class="text-right">
+                                            <input type="hidden" value="@item.Product.Id" id="productid" />
+                                            @*<a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a>*@
+                                            @*<a href="" class="btn btn-light" id="removecart"> Xóa</a>*@
+                                            <a href="" class="btn btn-light removecart" id="removecart-@item.Product.Id"> Xóa</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else{
+                                <p> Không có sản phẩm trong giỏ hàng</p>
+                            }
+
+
+                        </tbody>
+                    </table>
+
+                    <div class="card-body border-top">
+                        <a href="@Url.Action("Index","Payment")" class="btn btn-primary float-md-right"> Thanh toán <i class="fa fa-chevron-right"></i> </a>
+                        <a href="@Url.Action("Index","Products") " class="btn btn-light"> <i class="fa fa-chevron-left"></i> Tiếp tục mua sản phẩm </a>
+                    </div>
+                </div> <!-- card.// -->
+
+                <div class="alert alert-success mt-3">
+                    <p class="icontext"><i class="icon text-success fa fa-truck"></i> Giao và nhận hàng từ 1-2 tuần</p>
+                </div>
+
+            </main> <!-- col.// -->
+            <aside class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        @*<dl class="dlist-align">
+                            <dt>Total price:</dt>
+                            <dd class="text-right">USD 568</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>Discount:</dt>
+                            <dd class="text-right">USD 658</dd>
+                        </dl>*@
+                        <dl class="dlist-align" id="total">
+                            <dt>Tổng tiền:</dt>
+                            <dd class="text-right h5 "><strong>@*@string.Format("{0:0,0}")*@ @ViewBag.TongTien</strong></dd>
+                        </dl>
+                        <hr>
+                        <p class="text-center mb-3">
+                            <img src="~/Content/images/misc/payments.png" height="26">
+                        </p>
+
+                    </div> <!-- card-body.// -->
+                </div>  <!-- card .// -->
+            </aside> <!-- col.// -->
+        </div>
+
+    </div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
